@@ -13,6 +13,12 @@ const builtIn = ifDevice({ is_built_in_keyboard: true });
 const navActive = ifVar('nav_layer', 1);
 
 writeToProfile('Default', [
+  // Disable Cmd+H (hide) and Cmd+Opt+H (hide others) globally
+  rule('Disable Cmd+H').manipulators([
+    map('h', '⌘').to('vk_none'),
+    map('h', '⌘⌥').to('vk_none'),
+  ]),
+
   // Simultaneous combos
   rule('Combos').condition(builtIn).manipulators([
     mapSimultaneous(['q', 'w'], { key_up_when: 'any' }).to('⎋'),
@@ -61,9 +67,7 @@ writeToProfile('Default', [
         ["l", "r⌃"],
       ])
     )
-      .lazy(true)
       .holdTapStrategy("permissive-hold")
-      .chordalHold(true)
       .build()
   ),
 ])
