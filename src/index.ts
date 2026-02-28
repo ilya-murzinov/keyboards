@@ -30,8 +30,8 @@ writeToProfile('Default', [
   ]),
 
   rule('Nav Layer').condition(builtIn).manipulators([
-    map('␣')
-       .toIfAlone('␣')
+    map('spacebar')
+       .toIfAlone('spacebar')
       .to(toSetVar('nav_layer', 1))
       .toAfterKeyUp(toSetVar('nav_layer', 0)),
     map('h').condition(navActive).to('left_arrow'),
@@ -43,10 +43,10 @@ writeToProfile('Default', [
     map('s').condition(navActive).to('up_arrow', 'control'),
     map('d').condition(navActive).to('left_arrow', 'control'),
     map('f').condition(navActive).to('right_arrow', 'control'),
-    map('c').condition(navActive).to('open_bracket', '⌘'),
-    map('v').condition(navActive).to('close_bracket', '⌘'),
-    map('m').condition(navActive).to('open_bracket', '⌘⇧'),
-    map(',').condition(navActive).to('close_bracket', '⌘⇧'),
+    map('c').condition(navActive).to('open_bracket', 'command'),
+    map('v').condition(navActive).to('close_bracket', 'command'),
+    map('m').to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
+    map(',').to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
   ]),
 
   rule('Disable Cmd+H').manipulators([
