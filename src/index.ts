@@ -58,7 +58,7 @@ writeToProfile('Default', [
   // Caps Word: a+; toggles, deactivates on space/enter/escape/comma/period/slash/shifts
   // Uses actual Caps Lock under the hood, doesn't conflict with HRM
   capsWord()
-    .toggle(mapSimultaneous(['a', ';'], { key_up_when: 'any' }).build()[0])
+    .toggle(mapSimultaneous(['a', ';'], { key_up_when: 'any' }).condition(builtIn).build()[0])
     .build(),
 
   // Home row mods
