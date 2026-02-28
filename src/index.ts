@@ -11,23 +11,20 @@ import { hrm } from "karabiner.ts-greg-mods";
 
 const builtIn = ifDevice({ is_built_in_keyboard: true });
 const navActive = ifVar('nav_layer', 1);
+const capsWordActive = ifVar('caps_word', 1);
 
 writeToProfile('Default', [
-  // Disable Cmd+H (hide) and Cmd+Opt+H (hide others) globally
-  rule('Disable Cmd+H').manipulators([
-    map('h', '⌘').to('vk_none'),
-    map('h', '⌘⌥').to('vk_none'),
-  ]),
-
   // Simultaneous combos
   rule('Combos').condition(builtIn).manipulators([
+    mapSimultaneous(['f', 'j', 'k', 'l'], { key_up_when: 'any' }).to('⏎', '⌘'),
+    mapSimultaneous(['a', 'j', 'k', 'l'], { key_up_when: 'any' }).to('⏎', '⇧'),
     mapSimultaneous(['q', 'w'], { key_up_when: 'any' }).to('⎋'),
     mapSimultaneous(['a', 's'], { key_up_when: 'any' }).to('⇥'),
     mapSimultaneous(['j', 'k', 'l'], { key_up_when: 'any' }).to('⏎'),
     mapSimultaneous(['l', ';'], { key_up_when: 'any' }).to('⌫'),
     mapSimultaneous(['j', 'k'], { key_up_when: 'any' }).to('←', '⌥'),
     mapSimultaneous(['k', 'l'], { key_up_when: 'any' }).to('→', '⌥'),
-    mapSimultaneous(['a', ';'], { key_up_when: 'any' }).to('⇪'),
+    mapSimultaneous(['a', ';'], { key_up_when: 'any' }).to(toSetVar('caps_word', 1)),
     mapSimultaneous(['j', 'l'], { key_up_when: 'any' }).to('⌫'),
   ]),
 
@@ -51,6 +48,26 @@ writeToProfile('Default', [
     map('f', '⌘').condition(navActive).to('→', '⌃'),
     map('m', '⌘').condition(navActive).to('[', '⌘⇧'),
     map(',', '⌘').condition(navActive).to(']', '⌘⇧'),
+  ]),
+
+  // Disable Cmd+H (hide) and Cmd+Opt+H (hide others) globally
+  // Must be after Nav Layer so Cmd+H → left arrow works when nav is active
+  rule('Disable Cmd+H').manipulators([
+    map('h', '⌘').to('vk_none'),
+    map('h', '⌘⌥').to('vk_none'),
+  ]),
+
+  // Caps Word: a+; activates, break keys deactivate, letters produce shift+letter
+  rule('Caps Word').condition(builtIn).manipulators([
+    ...['spacebar', '⏎', '⇥', '⎋', '⌫'].map(key =>
+      map(key as any).condition(capsWordActive)
+        .to(toSetVar('caps_word', 0))
+        .to(key as any)
+    ),
+    ...'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
+      map(letter as any).condition(capsWordActive)
+        .to(letter as any, '⇧')
+    ),
   ]),
 
   // Home row mods
