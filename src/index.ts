@@ -45,8 +45,8 @@ writeToProfile('Default', [
     map('f').condition(navActive).to('right_arrow', 'control'),
     map('c').condition(navActive).to('open_bracket', 'command'),
     map('v').condition(navActive).to('close_bracket', 'command'),
-    map('m').to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
-    map(',').to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
+    map('m').condition(navActive).to({ key_code: 'open_bracket', modifiers: ['command', 'shift'] }),
+    map(',').condition(navActive).to({ key_code: 'close_bracket', modifiers: ['command', 'shift'] }),
   ]),
 
   rule('Disable Cmd+H').manipulators([
